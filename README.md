@@ -58,8 +58,6 @@ A complete e-commerce solution with product management, user authentication, pay
 | Python 3.9 | Core language |
 | Django 3.2 | Web framework |
 | PostgreSQL | Database |
-| Celery | Async tasks |
-| Redis | Caching |
 
 ### Frontend
 | Technology | Purpose |
@@ -67,8 +65,6 @@ A complete e-commerce solution with product management, user authentication, pay
 | HTML | Structure |
 | CSS3/SASS | Styling |
 | Bootstrap | Responsive layout |
-| jQuery | DOM manipulation |
-| AJAX | Dynamic content |
 
 ### Integrations
 | Service | Usage |
