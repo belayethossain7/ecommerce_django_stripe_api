@@ -1,0 +1,96 @@
+{% extends "base/base.html" %}
+{% block title %}Contact Us{% endblock %}
+{% block start %}
+
+<section class="section-content padding-bottom">
+  <div class="mx-auto" style="max-width: 85rem; margin-top: 50px">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-5 mr-auto">
+          <h2 style="text-align: left">Contact Us</h2>
+          <p
+            class="mb-5"
+            style="margin-top: revert; text-align: justify; line-height: 2rem"
+          >
+            Have questions or need help with your order? Our dedicated support
+            team is here to assist you with any inquiries you may have. Whether
+            you need help tracking an order, have questions about a product, or
+            need assistance with a return, we're here to help. Don't hesitate to
+            reach out to us anytime!
+          </p>
+          <ul class="contact-info list-unstyled pl-md-5 mb-5">
+            <li class="d-flex text-black mb-2">
+              <span class="mr-3"><i class="fas fa-map-marker-alt"></i></span>
+              Dhaka, Bangladesh
+            </li>
+            <li class="d-flex text-black mb-2">
+              <span class="mr-3"><i class="fas fa-phone"></i></span>
+              01835666847
+            </li>
+            <li class="d-flex text-black">
+              <span class="mr-3"><i class="fas fa-envelope"></i></span>
+              <a href="mailto:support@ecommerce.com">belayet.hossain6847@gmail.com</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <form method="POST" action="https://formspree.io/f/{{ form_id }}" class="mb-5">
+            {% csrf_token %} {% include "base/alert.html" %}
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <label for="name" class="col-form-label">First Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="first-name"
+                  required
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <label for="name" class="col-form-label">Last Name</label>
+                <input type="text" class="form-control" name="last-name" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <label for="email" class="col-form-label">Email</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="email"
+                  pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
+                  required
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <label for="message" class="col-form-label">Message</label>
+                <textarea
+                  class="form-control"
+                  name="message"
+                  cols="30"
+                  rows="7"
+                >
+                </textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <input
+                  type="submit"
+                  value="Send Message"
+                  class="btn btn-primary rounded-0 py-2 px-4"
+                />
+                <span class="submitting"></span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,229 @@
+{% extends "base/base.html" %}
+{% block title %}Shopping Cart{% endblock %}
+{% block start %} 
+{% load static %}
+
+<section class="section-content padding-y">
+  <div class="container">
+    {% include 'base/alert.html' %}
+    <div class="row">
+      <main class="col-md-9">
+        <div class="card">
+          <table class="table table-borderless table-shopping-cart">
+            <thead class="text-muted">
+              <tr class="small text-uppercase">
+                <th scope="col">Product</th>
+                <th scope="col" width="120">Quantity</th>
+                <th scope="col" width="120">Price</th>
+                <th scope="col" class="text-right" width="200"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cart_item in cart.cart_items.all %}
+              <tr>
+                <td>
+                  <figure class="itemside">
+                    <div class="aside">
+                      <img
+                        src="/media/{{ cart_item.product.product_images.first.image }}"
+                        class="img-sm"
+                      />
+                    </div>
+                    <figcaption class="info">
+                      <a
+                        href="{% url 'get_product' cart_item.product.slug %}"
+                        class="title text-dark"
+                      >
+                        {{ cart_item.product.product_name }}
+                      </a>
+                      
+                      <p class="text-muted small">
+                        {% if cart_item.size_variant %}
+                          Size: {{ cart_item.size_variant.size_name }}<br />
+                        {% else %}
+                          Size : N/A <br />
+                        {% endif %} 
+                        
+                        {% if cart_item.product.color_variant.exists %}
+                          {% for color in cart_item.product.color_variant.all %}
+                            Color: {{ color.color_name }}<br />
+                          {% endfor %}
+                        {% else %}
+                          Color: N/A<br />
+                        {% endif %} 
+
+                        Brand: Nike
+                      </p>
+                    </figcaption>
+                  </figure>
+                </td>
+                <td>
+                  <select class="form-control" onchange="updateCartItem(this, '{{ cart_item.uid }}')">
+                    {% for i in quantity_range %}
+                      <option value="{{ i }}" {% if cart_item.quantity == i %}selected{% endif %}>{{ i }}</option>
+                    {% endfor %}
+                  </select>
+                </td>
+                <td>
+                  <div class="price-wrap">
+                    <var class="price">${{ cart_item.get_product_price }} </var>
+                  </div>
+                  <!-- price-wrap .// -->
+                </td>
+                <td class="text-right">
+                  <a
+                    data-original-title="Save to Wishlist"
+                    title=""
+                    href=""
+                    class="btn btn-light"
+                    data-toggle="tooltip"
+                  >
+                    <i class="fa fa-heart"></i>
+                  </a>
+                  <a href="{% url 'remove_cart' cart_item.uid %}" class="btn btn-danger">
+                    Remove
+                  </a>
+                </td>
+              </tr>
+
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <button id="payment-button" class="btn btn-primary float-md-right">
+              Make Purchase <i class="fa fa-chevron-right"></i>
+        </button>
+
+
+            <a href="{% url 'index' %}" class="btn btn-light">
+              <i class="fa fa-chevron-left"></i> Continue Shopping
+            </a>
+          </div>
+        </div>
+        <!-- card.// -->
+
+        <div class="alert alert-success mt-3">
+          <p class="icontext">
+            <i class="icon text-success fa fa-truck"></i> Free Delivery within
+            1-2 weeks
+          </p>
+        </div>
+      </main>
+      <!-- col.// -->
+      <aside class="col-md-3">
+        <div class="card mb-3">
+          <div class="card-body">
+            <form method="POST">
+              {% csrf_token %}
+              <div class="form-group">
+                <label>Have coupon?</label>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="coupon"
+                    placeholder="Coupon code"
+                  />
+                  <span class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Apply</button>
+                  </span>
+                </div>
+              </div>
+
+              {% if cart.coupon %}
+
+              <a href="{% url 'remove_coupon' cart.uid %}" class="btn btn-success">
+                {{ cart.coupon.coupon_code }}
+              </a>
+
+              {% endif %}
+            </form>
+          </div>
+          <!-- card-body.// -->
+        </div>
+        <!-- card .// -->
+        <div class="card">
+          <div class="card-body">
+            <dl class="dlist-align">
+              <dt>Total price:</dt>
+              <dd class="text-right">
+                <strong>${{ cart.get_cart_total }}</strong>
+              </dd>
+            </dl>
+            {% if cart.coupon %}
+            <dl class="dlist-align">
+              <dt>Discount:</dt>
+              <dd class="text-right">${{ cart.coupon.discount_amount }}</dd>
+            </dl>
+            <dl class="dlist-align">
+              <dt>Total:</dt>
+              <dd class="text-right h5">
+                <strong>${{ cart.get_cart_total_price_after_coupon }}</strong>
+              </dd>
+            </dl>
+            {% endif %}
+            <hr />
+            <p class="text-center mb-3">
+              <img src="{% static 'images/misc/payments.png' %}" height="26" />
+            </p>
+          </div>
+          <!-- card-body.// -->
+        </div>
+        <!-- card .// -->
+      </aside>
+      <!-- col.// -->
+    </div>
+  </div>
+  <!-- container .//  -->
+</section>
+{% endblock %}
+{% block extra_js %}
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+const stripe = Stripe('{{ STRIPE_PUBLISHABLE_KEY }}');
+const elements = stripe.elements();
+
+// Create card element
+const card = elements.create('card');
+card.mount('#card-element');
+
+const form = document.getElementById('payment-form');
+const paymentButton = document.getElementById('payment-button');
+
+paymentButton.addEventListener('click', async (e) => {
+    e.preventDefault();
+    paymentButton.disabled = true;
+
+    const {paymentIntent, error} = await stripe.confirmCardPayment(
+        '{{ client_secret }}', {
+        payment_method: {
+            card: card,
+        }
+    });
+
+    if (error) {
+        // Handle error
+        console.error(error);
+        paymentButton.disabled = false;
+    } else {
+        // Payment successful
+        fetch('{% url "payment_success" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                payment_intent_id: paymentIntent.id
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = `/accounts/success/?order_id=${data.order_id}`;
+            }
+        });
+    }
+});
+</script>
+{% endblock extra_js %}

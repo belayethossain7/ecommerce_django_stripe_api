@@ -1,0 +1,33 @@
+{% extends 'base/base.html' %}
+{% block title %}Payment Successful!{% endblock %}
+{% block start %}
+
+<!-- ============================ COMPONENT Payment Success ================================= -->
+<section class="section-content padding-bottom">
+  <div class="container-xl d-flex justify-content-center align-items-center mt-5">
+    <div class="row justify-content-center w-100">
+      <div class="col-xl-5">
+        <div class="card mb-4">
+          <div class="card-header" style="text-align: center; font-size: 25px">
+            Payment Successful!
+          </div>
+          <div class="card-body text-center">
+            <p>
+              Your order with Order ID: <strong>{{ order_id }} </strong> has
+              been successfully processed.
+            </p>
+            <p>Thank you for shopping with us!</p>
+            <a href="{% url 'index' %}" class="btn btn-primary mt-3 mb-3 mr-3">
+              Continue Shopping
+            </a>
+            <a href="{% url 'order_details' order_id=order_id %}" class="btn btn-warning">
+              View Order Details
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============================ COMPONENT Payment Success END ================================= -->
+{% endblock %}
