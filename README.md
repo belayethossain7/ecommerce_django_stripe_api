@@ -55,8 +55,8 @@ A complete e-commerce solution with product management, user authentication, pay
 ### Backend
 | Technology | Purpose |
 |------------|---------|
-| Python 3.9 | Core language |
-| Django 3.2 | Web framework |
+| Python  | Core language |
+| Django  | Web framework |
 | PostgreSQL | Database |
 
 ### Frontend
@@ -77,12 +77,36 @@ A complete e-commerce solution with product management, user authentication, pay
 ## ⚙ Installation
 
 ### Prerequisites
-- Python 3.9+
-- PostgreSQL 12+
+- Python
+- PostgreSQL
 
 ### Setup Instructions
 
 1. **Clone repository**
    ```bash
    git clone https://github.com/yourusername/django-ecommerce.git
-   cd django-ecommerce
+
+###   [Screenshots]
+
+  ### Here is some project Screenshots views
+
+   ![image](https://github.com/user-attachments/assets/bb2032c8-e1b1-470b-a32a-b3b30536f929)
+
+   ![image](https://github.com/user-attachments/assets/251d03a5-0830-4251-8dc8-e2f951f2824f)
+
+   ![image](https://github.com/user-attachments/assets/4494022d-2714-4eaa-9c03-71bb0a970fd4)
+
+   ![image](https://github.com/user-attachments/assets/d9363372-27d7-4c98-bd94-b6c86f0979cf)
+
+   ![image](https://github.com/user-attachments/assets/580d8b9e-1a69-47cb-99ee-28a6e42e0767)
+
+
+   ![image](https://github.com/user-attachments/assets/31102e73-846f-406d-b5fa-f9663c3a07ce)
+
+   ![image](https://github.com/user-attachments/assets/26efbf87-646d-44bc-a054-cc462288807d)
+
+
+
+
+
+
